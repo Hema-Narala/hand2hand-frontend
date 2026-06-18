@@ -18,7 +18,12 @@ import styles from "../../styles/MarketplaceScreenStyles/ChatScreenStyles";
 import BASE_URL from "../../utils/api";
 
 import { io } from "socket.io-client";
-const socket = io("http://10.0.2.2:5000");
+// const socket = io("http://10.0.2.2:5000");
+// const socket = io("https://your-render-backend.onrender.com");
+const socket = io(BASE_URL, {
+  transports: ["websocket"]
+});
+
 
 // const BASE_URL = "http://10.0.2.2:5000";
 
@@ -421,6 +426,7 @@ const ChatScreen = ({ route, navigation }) => {
               source={{ uri: item.images[0] }}
               style={styles.image}
             />
+           
           )}
 
           {/* AUDIO */}
@@ -554,7 +560,7 @@ const ChatScreen = ({ route, navigation }) => {
           </Text>
         )}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={isRecording ? stopRecording : startRecording}
         >
           <Ionicons
@@ -562,7 +568,7 @@ const ChatScreen = ({ route, navigation }) => {
             size={26}
             color={isRecording ? "#d4a1e9" : "#666"}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           onPress={() => {

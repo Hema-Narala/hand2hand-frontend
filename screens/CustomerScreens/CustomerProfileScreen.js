@@ -349,18 +349,21 @@ const handleSaveProfile = async () => {
               style={styles.input}
               value={form.name}
               placeholder="Enter Name"
+              placeholderTextColor="#353333"
               onChangeText={(t) => setForm({ ...form, name: t })}
             />
             <TextInput
               style={styles.input}
               value={form.phone}
               placeholder="Enter Mobile number"
+              placeholderTextColor="#353333"
               onChangeText={(t) => setForm({ ...form, phone: t })}
             />
             <TextInput
               style={styles.input}
               value={form.email}
               placeholder="Enter Mail id"
+              placeholderTextColor="#353333"
               onChangeText={(t) => setForm({ ...form, email: t })}
             />
 
@@ -381,6 +384,7 @@ const handleSaveProfile = async () => {
                   key={key}
                   style={styles.input}
                   placeholder={key}
+                  placeholderTextColor="#353333"
                   value={value}
                   onChangeText={(t) =>
                     setForm({

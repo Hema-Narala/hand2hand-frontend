@@ -13,8 +13,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "../WorkerComponentStyles/JobOfferCardStyles";
 import { startChat } from "../../Marketplace/MarketplaceComponents/startChat";
+import BASE_URL from "../../../utils/api";
 
-const BASE_URL = "http://10.0.2.2:5000";
+// const BASE_URL = "http://10.0.2.2:5000";
 
 const JobOfferCard = ({ offer, refreshRequests }) => {
 

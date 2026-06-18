@@ -12,6 +12,7 @@ import ChatStackNavigator from './CustomerChatStackNavigator';
 import EcoStoreScreen from "../../screens/CustomerScreens/EcoStoreSubScreens/EcoStoreScreen";
 import SellScreen from "../../screens/CustomerScreens/SellScreen";
 import HomeStackNavigator from './CustomerHomeStackNavigator';
+import ChatScreen from '../../screens/marketplaceScreens/ChatScreen'
 
 const Tab = createBottomTabNavigator();
 
@@ -110,14 +111,42 @@ const CustomerTabs = () => {
       {/* ♻️ Chat */}
       <Tab.Screen
         name="Chat"
-        // component={SellScrapStackNavigator}
+        component={ChatStackNavigator}
+        options={({ route }) => {
+          const routeName =
+            getFocusedRouteNameFromRoute(route) ?? "ChatsListScreen";
+
+          return {
+            tabBarStyle:
+              routeName === "ChatScreen"
+                ? { display: "none" }
+                : {
+                    backgroundColor: "#fff",
+                    borderTopWidth: 0.5,
+                    borderTopColor: "#ccc",
+                    height: 65,
+                    paddingBottom: 5,
+                  },
+
+            tabBarIcon: ({ color }) => (
+              <Ionicons
+                name="chatbubble-ellipses"
+                size={30}
+                color={color}
+              />
+            ),
+          };
+        }}
+      />
+      {/* <Tab.Screen
+        name="Chat"
         component={ChatStackNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <Ionicons name="chatbubble-ellipses" size={30} color={color} />
           ),
         }}
-      />
+      /> */}
 
       {/* Bookings */}
       <Tab.Screen
@@ -127,7 +156,7 @@ const CustomerTabs = () => {
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route) ?? 'HomeMain';
           // const hideOnScreens = ['LevelStack', 'Tasks', 'Achievements', 'Ranking', 'MoreLevels','WalletStack','History','DiscoveryStack','CampusComplaintsStack'];
-          const hideOnScreens = [];
+          const hideOnScreens = ['ChatScreen'];
 
           return {
             tabBarStyle: hideOnScreens.includes(routeName)

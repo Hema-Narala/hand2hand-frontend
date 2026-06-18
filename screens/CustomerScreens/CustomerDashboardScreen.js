@@ -80,6 +80,7 @@ export default function CustomerDashboardScreen({navigation,route }) {
 
           if (res.ok) {
             setProfile(data);
+            console.log("Customer Profile:", data);
           } else {
             console.log("❌ Error fetching user:", data.message);
           }
@@ -176,14 +177,23 @@ export default function CustomerDashboardScreen({navigation,route }) {
 
 
   // Extract first word of firstname if exists
-  const firstName = user?.firstname
+  const firstName = profile?.name
+    ? profile.name.split(" ")[0]
+    : user?.firstname
     ? user.firstname.split(" ")[0]
     : "Dude";
+  // const firstName = user?.firstname
+  //   ? user.firstname.split(" ")[0]
+  //   : "Dude";
+
 
   // Construct short address
-  const shortAddress = user?.address
-    ? `${user.address.house || ""} ${user.address.street || ""}, ${user.address.district || ""}`.trim()
+  const shortAddress = profile?.addressDetails
+    ? `${profile.addressDetails.house || ""} ${profile.addressDetails.street || ""}, ${profile.addressDetails.district || ""}`.trim()
     : "";
+  // const shortAddress = user?.address
+  //   ? `${user.address.house || ""} ${user.address.street || ""}, ${user.address.district || ""}`.trim()
+  //   : "";
 
     const workerRecommendations = [
       {
@@ -237,25 +247,15 @@ export default function CustomerDashboardScreen({navigation,route }) {
             </Text>
           </View>
 
-          <View style={styles.headerRight}>
+          {/* <View style={styles.headerRight}>
             <Pressable style={styles.iconBtn}>
               <FontAwesome
                 name="bell"
                 size={22}
                 color="rgb(129, 89, 207)"
               />
-            </Pressable>
-
-            {/*
-            <Pressable style={styles.iconBtn}>
-              <FontAwesome
-                name="comments"
-                size={23}
-                color="#7c5c98"
-              />
-            </Pressable>
-            */}
-          </View>
+            </Pressable>  
+          </View> */}
         </View>
 
        

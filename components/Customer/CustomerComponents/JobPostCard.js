@@ -11,8 +11,9 @@ import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { startChat } from "../../Marketplace/MarketplaceComponents/startChat";
+import BASE_URL from "../../../utils/api";
 
-const BASE_URL = "http://10.0.2.2:5000";
+// const BASE_URL = "http://10.0.2.2:5000";
 
 const JobPostCard = ({ post, refreshPosts }) => {
 

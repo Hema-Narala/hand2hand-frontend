@@ -12,8 +12,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../WorkerComponentStyles/WorkerAvailabilityCardStyles";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
+import BASE_URL from "../../../utils/api";
 
-const BASE_URL = "http://10.0.2.2:5000";
+// const BASE_URL = "http://10.0.2.2:5000";
 
 const WorkerAvailabilityCard = ({ post, onDeleted, onEdit}) => {
 

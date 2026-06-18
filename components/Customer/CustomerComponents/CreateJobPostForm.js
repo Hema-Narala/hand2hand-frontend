@@ -18,9 +18,9 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { styles } from "../CustomerComponentStyles/CreateJobPostFormStyles";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { startChat } from "../../Marketplace/MarketplaceComponents/startChat";
+import BASE_URL from "../../../utils/api";
 
-const BASE_URL = "http://10.0.2.2:5000";
-
+// const BASE_URL = "http://10.0.2.2:5000";
 
 const services = [
   "Plumber", "Electrician", "Cook", "House Cleaning",
@@ -226,6 +226,7 @@ const CreateJobPostForm = () => {
 
           <TextInput
             placeholder="Customer Name"
+            placeholderTextColor="#353333"
             value={formData.name}
             onChangeText={(text) => handleChange("name", text)}
             style={styles.input}
@@ -236,14 +237,15 @@ const CreateJobPostForm = () => {
             onValueChange={(value) => handleChange("service", value)}
             style={styles.input}
           >
-            <Picker.Item label="Select Service" value="" />
+            <Picker.Item label="Select Service" value="" color="#353333"/>
             {services.map(s => (
-              <Picker.Item key={s} label={s} value={s} />
+              <Picker.Item key={s} label={s} value={s} color="#353333"/>
             ))}
           </Picker>
 
           <TextInput
             placeholder="Full Address"
+            placeholderTextColor="#353333"
             value={formData.address}
             onChangeText={(text) => handleChange("address", text)}
             style={styles.input}
@@ -251,6 +253,7 @@ const CreateJobPostForm = () => {
 
           <TextInput
             placeholder="Phone Number"
+            placeholderTextColor="#353333"
             keyboardType="phone-pad"
             value={formData.phone}
             onChangeText={(text) => handleChange("phone", text)}
@@ -287,6 +290,7 @@ const CreateJobPostForm = () => {
 
           <TextInput
             placeholder="Job Description"
+            placeholderTextColor="#353333"
             value={formData.description}
             onChangeText={(text) => handleChange("description", text)}
             style={[styles.input, { height: 80 }]}
@@ -295,6 +299,7 @@ const CreateJobPostForm = () => {
 
           <TextInput
             placeholder="Budget per day (numbers only)"
+            placeholderTextColor="#353333"
             value={formData.budget}
             onChangeText={(text) => handleChange("budget", text)}
             style={styles.input}
@@ -302,6 +307,7 @@ const CreateJobPostForm = () => {
 
           <TextInput
             placeholder="Additional Requirements (optional)"
+            placeholderTextColor="#353333"
             value={formData.additionalRequirements}
             onChangeText={(text) => handleChange("additionalRequirements", text)}
             style={[styles.input, { height: 60 }]}

@@ -35,6 +35,8 @@ logoImg: {
   height: 38,
   borderRadius: 8,
   resizeMode: "contain",
+  marginLeft:10,
+  marginTop:8,
 },
 
 appName: {

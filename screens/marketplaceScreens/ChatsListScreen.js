@@ -102,9 +102,18 @@ const ChatsListScreen = ({ navigation }) => {
     }
   };
 
+  // useEffect(() => {
+  //   fetchChats();
+  // }, []);
   useEffect(() => {
     fetchChats();
-  }, []);
+
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchChats();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   // ================= FILTER EXISTING CHATS =================
   const filteredChats = chats.filter(chat =>
@@ -128,6 +137,7 @@ const ChatsListScreen = ({ navigation }) => {
         <Ionicons name="search" size={20} />
         <TextInput
           placeholder="Search users..."
+          placeholderTextColor="#050505"
           value={search}
           onChangeText={searchUsers}
           style={styles.searchInput}

@@ -49,7 +49,11 @@ const WorkerProfileScreen = ({navigation}) => {
     Plumbing: true,
     Electrical: true,
     Painting: false,
-    Carpentry: false
+    Carpentry: false,
+    Cooking: false,
+    House_Keeping:false,
+    Driving: false,
+    Laundry: false,
   });
 
   const [profileImage, setProfileImage] = useState(
@@ -338,12 +342,14 @@ const WorkerProfileScreen = ({navigation}) => {
               style={styles.input}
               value={form.name}
               placeholder="Enter Name"
+              placeholderTextColor="#353333"
               onChangeText={t => setForm({ ...form, name: t })}
             />
             <TextInput
               style={styles.input}
               value={form.bio}
               placeholder="Enter your Bio"
+              placeholderTextColor="#353333"
               multiline
               onChangeText={t => setForm({ ...form, bio: t })}
             />
@@ -351,6 +357,7 @@ const WorkerProfileScreen = ({navigation}) => {
               style={styles.input}
               value={form.phone}
               placeholder="Enter Phone number"
+              placeholderTextColor="#353333"
               keyboardType="phone-pad"
               onChangeText={t => setForm({ ...form, phone: t })}
             />
@@ -359,6 +366,7 @@ const WorkerProfileScreen = ({navigation}) => {
               style={styles.input}
               value={form.email}
               placeholder="Enter Email"
+              placeholderTextColor="#353333"
               keyboardType="email-address"
               autoCapitalize="none"
               onChangeText={t => setForm({ ...form, email: t })}
@@ -368,6 +376,7 @@ const WorkerProfileScreen = ({navigation}) => {
               style={styles.input}
               value={form.address}
               placeholder="Address"
+              placeholderTextColor="#353333"
               onChangeText={t => setForm({ ...form, address: t })}
             />
 
@@ -377,6 +386,7 @@ const WorkerProfileScreen = ({navigation}) => {
                 style={styles.socialTextInput}
                 value={form.instagram}
                 placeholder="Instagram username"
+                placeholderTextColor="#353333"
                 onChangeText={t => setForm({ ...form, instagram: t })}
               />
             </View>
@@ -387,6 +397,7 @@ const WorkerProfileScreen = ({navigation}) => {
                 style={styles.socialTextInput}
                 value={form.facebook}
                 placeholder="Facebook profile"
+                placeholderTextColor="#353333"
                 onChangeText={t => setForm({ ...form, facebook: t })}
               />
             </View>

@@ -32,9 +32,11 @@ headerLeft: {
 
 logoImg: {
   width: 42,
-  height: 38,
+  height: 50,
   borderRadius: 8,
   resizeMode: "contain",
+  marginLeft:10,
+  marginTop:8,
 },
 
 appName: {

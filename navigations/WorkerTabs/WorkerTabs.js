@@ -127,7 +127,7 @@ const WorkerTabs = () => {
         // }}
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route) ?? 'WorkerDashboardScreen';
-          const hideOnScreens = ['SearchWork', 'RequestsForMyPost', 'CreateJobPostForm'];
+          const hideOnScreens = ['SearchWork', 'RequestsForMyPost', 'CreateJobPostForm','ChatScreen'];
           console.log("Route Name:", routeName);
           return {
             tabBarStyle: hideOnScreens.includes(routeName)
@@ -150,14 +150,42 @@ const WorkerTabs = () => {
       {/* ♻️ Chat */}
       <Tab.Screen
         name="Chat"
-        // component={SellScrapStackNavigator}
+        component={ChatStackNavigator}
+        options={({ route }) => {
+          const routeName =
+            getFocusedRouteNameFromRoute(route) ?? "ChatsListScreen";
+
+          return {
+            tabBarStyle:
+              routeName === "ChatScreen"
+                ? { display: "none" }
+                : {
+                    backgroundColor: "#fff",
+                    borderTopWidth: 0.5,
+                    borderTopColor: "#ccc",
+                    height: 65,
+                    paddingBottom: 5,
+                  },
+
+            tabBarIcon: ({ color }) => (
+              <Ionicons
+                name="chatbubble-ellipses"
+                size={30}
+                color={color}
+              />
+            ),
+          };
+        }}
+      />
+      {/* <Tab.Screen
+        name="Chat"
         component={ChatStackNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <Ionicons name="chatbubble-ellipses" size={30} color={color} />
           ),
         }}
-      />
+      /> */}
 
 
       {/* Bookings */}

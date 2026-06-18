@@ -8,10 +8,11 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
+import BASE_URL from "../../../utils/api";
 
-const BASE_URL = __DEV__
-  ? "http://10.0.2.2:5000"
-  : "https://hand2hand-backend.onrender.com";
+// const BASE_URL = __DEV__
+//   ? "http://10.0.2.2:5000"
+//   : "https://hand2hand-backend.onrender.com";
 
 const ExperienceSection = ({ images, setImages }) => {
 
@@ -90,7 +91,7 @@ const ExperienceSection = ({ images, setImages }) => {
     }
   };
 
-
+  console.log("EXPERIENCE IMAGES:", JSON.stringify(images, null, 2));
   return (
     <View style={{ marginTop: 20 }}>
 

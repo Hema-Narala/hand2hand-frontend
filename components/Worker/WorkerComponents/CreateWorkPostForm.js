@@ -11,9 +11,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 // import * as Location from "expo-location";
-import styles from "../WorkerComponentStyles/CreateWorkPostFormStyles"
+import styles from "../WorkerComponentStyles/CreateWorkPostFormStyles";
+import BASE_URL from "../../../utils/api";
 
-const BASE_URL = "http://10.0.2.2:5000";
+// const BASE_URL = "http://10.0.2.2:5000";
 
 const services = [
   "Plumber", "Electrician", "Cook", "House Cleaning",
@@ -188,6 +189,7 @@ const CreateWorkPostForm = ({ initialData, onPostSuccess, onCancel }) => {
       ))} */}
       <TextInput
         placeholder="Name"
+        placeholderTextColor="#353333"
         style={styles.input}
         value={formData.name}
         onChangeText={(text) => handleChange("name", text)}
@@ -198,14 +200,15 @@ const CreateWorkPostForm = ({ initialData, onPostSuccess, onCancel }) => {
         onValueChange={(value) => handleChange("service", value)}
         style={styles.input}
       >
-        <Picker.Item label="Select Service" value="" />
+        <Picker.Item label="Select Service" value="" color="#131111"/>
         {services.map(s => (
-          <Picker.Item key={s} label={s} value={s} />
+          <Picker.Item key={s} label={s} value={s} color="#090808"/>
         ))}
       </Picker>
 
       <TextInput
         placeholder="Full Address"
+        placeholderTextColor="#353333"
         style={styles.input}
         value={formData.address}
         onChangeText={(text) => handleChange("address", text)}
@@ -213,6 +216,7 @@ const CreateWorkPostForm = ({ initialData, onPostSuccess, onCancel }) => {
 
       <TextInput
         placeholder="Phone"
+        placeholderTextColor="#353333"
         style={styles.input}
         keyboardType="phone-pad"
         value={formData.phone}
@@ -223,6 +227,7 @@ const CreateWorkPostForm = ({ initialData, onPostSuccess, onCancel }) => {
         style={styles.input}
         onPress={() => setShowDatePicker(true)}
         placeholder="Date, you need service from"
+        placeholderTextColor="#353333"
       >
         <Text>
           {selectedDate
@@ -249,6 +254,7 @@ const CreateWorkPostForm = ({ initialData, onPostSuccess, onCancel }) => {
 
       <TextInput
         placeholder="Expected Salary Per Day"
+        placeholderTextColor="#353333"
         style={styles.input}
         keyboardType="numeric"
         value={formData.budget}
@@ -257,6 +263,7 @@ const CreateWorkPostForm = ({ initialData, onPostSuccess, onCancel }) => {
 
       <TextInput
         placeholder="Experience (years)"
+        placeholderTextColor="#353333"
         style={styles.input}
         keyboardType="numeric"
         value={formData.experience}
@@ -265,6 +272,7 @@ const CreateWorkPostForm = ({ initialData, onPostSuccess, onCancel }) => {
 
       <TextInput
         placeholder="Additional Info"
+        placeholderTextColor="#353333"
         style={styles.input}
         value={formData.requirements}
         onChangeText={(text) => handleChange("requirements", text)}

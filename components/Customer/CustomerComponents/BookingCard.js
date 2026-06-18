@@ -11,8 +11,9 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import styles from "../CustomerComponentStyles/BookingCardStyles";
+import BASE_URL from "../../../utils/api";
 
-const BASE_URL = "http://10.0.2.2:5000";
+// const BASE_URL = "http://10.0.2.2:5000";
 
 export default function BookingCard({
   booking,

@@ -259,14 +259,14 @@ export default function WorkerDashboardScreen({navigation,route }) {
             </Text>
           </View>
 
-          <View style={styles.headerRight}>
+          {/* <View style={styles.headerRight}>
             <Pressable style={styles.iconBtn}>
               <FontAwesome
                 name="bell"
                 size={22}
                 color="rgb(129, 89, 207)"
               />
-            </Pressable>
+            </Pressable> */}
 
             {/*
             <Pressable style={styles.iconBtn}>
@@ -277,7 +277,7 @@ export default function WorkerDashboardScreen({navigation,route }) {
               />
             </Pressable>
             */}
-          </View>
+          {/* </View> */}
         </View>
 
        

@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const BASE_URL = "http://10.0.2.2:5000";
+import BASE_URL from "../../../utils/api";
+// const BASE_URL = "http://10.0.2.2:5000";
 
 export const startChat = async (user, navigation) => {
   try {
