@@ -29,7 +29,20 @@ const RequestCard = ({ request, onAccept }) => {
     <View style={styles.card}>
 
       {/* LEFT PROFILE */}
-      <View style={styles.leftSection}>
+      <TouchableOpacity 
+        style={styles.leftSection}
+        onPress={() => {
+          if (request.sender.role === "worker") {
+            navigation.navigate("ViewWorkerProfile", {
+              workerId: request.sender._id
+            });
+          } else {
+            navigation.navigate("ViewCustomerProfile", {
+              customerId: request.sender._id
+            });
+          }
+        }}
+      >
         <Image
           source={
             request.profileImage
@@ -42,7 +55,7 @@ const RequestCard = ({ request, onAccept }) => {
         <Text style={styles.name}>
           {request.name || "No Name"}
         </Text>
-      </View>
+      </TouchableOpacity>
 
 
       {/* RIGHT DETAILS */}

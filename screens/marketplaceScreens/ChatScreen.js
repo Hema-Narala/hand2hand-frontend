@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Modal
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,13 +17,10 @@ import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system/legacy";
 import styles from "../../styles/MarketplaceScreenStyles/ChatScreenStyles";
 import BASE_URL from "../../utils/api";
+import socket from "../../utils/socket";
 
-import { io } from "socket.io-client";
 // const socket = io("http://10.0.2.2:5000");
 // const socket = io("https://your-render-backend.onrender.com");
-const socket = io(BASE_URL, {
-  transports: ["websocket"]
-});
 
 
 // const BASE_URL = "http://10.0.2.2:5000";
@@ -40,6 +38,12 @@ const ChatScreen = ({ route, navigation }) => {
 
   const [currentSound, setCurrentSound] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const [isSending, setIsSending] = useState(false);
+
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
 
   const flatListRef = useRef();
 
@@ -159,45 +163,135 @@ const ChatScreen = ({ route, navigation }) => {
   const pickImage = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images"],
+        allowsMultipleSelection: true,
         quality: 0.7
       });
 
       if (result.canceled) return;
 
-      const imageUri = result.assets[0].uri;
+      // Store selected images only, don't upload
+      const selected = result.assets.slice(0, 3);
 
-      const token = await AsyncStorage.getItem("token");
+      if (result.assets.length > 3) {
+        alert("Only first 3 images will be selected");
+      }
 
-      const formData = new FormData();
-      formData.append("images", {
-        uri: imageUri,
-        name: "chat.jpg",
-        type: "image/jpeg"
-      });
-      formData.append("roomId", roomId);
-      formData.append("messageType", "image");
-
-      const res = await fetch(`${BASE_URL}/api/chat/message`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        body: formData
-      });
-
-      const data = await res.json();
-
-      // setMessages(prev => [...prev, data.message]);
-
-      setTimeout(() => {
-        flatListRef.current?.scrollToEnd({ animated: true });
-      }, 100);
+      setSelectedImages(selected);
 
     } catch (err) {
       console.log(err);
     }
   };
+  // const pickImage = async () => {
+  //   try {
+  //     const result = await ImagePicker.launchImageLibraryAsync({
+  //       mediaTypes: ["images"],
+  //       quality: 0.7
+  //     });
+
+  //     if (result.canceled) return;
+
+  //     const imageUri = result.assets[0].uri;
+
+  //     const token = await AsyncStorage.getItem("token");
+
+  //     const formData = new FormData();
+  //     formData.append("images", {
+  //       uri: imageUri,
+  //       name: "chat.jpg",
+  //       type: "image/jpeg"
+  //     });
+  //     formData.append("roomId", roomId);
+  //     formData.append("messageType", "image");
+
+  //     const res = await fetch(`${BASE_URL}/api/chat/message`, {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`
+  //       },
+  //       body: formData
+  //     });
+
+  //     const data = await res.json();
+
+
+  //     setTimeout(() => {
+  //       flatListRef.current?.scrollToEnd({ animated: true });
+  //     }, 100);
+
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  // ================= REMOVE SELECTED IMAGES IN CHATS =================
+  const removeSelectedImage = (index) => {
+    setSelectedImages(prev =>
+      prev.filter((_, i) => i !== index)
+    );
+  };
+
+  // ================= SEND SELECTED IMAGES IN CHATS =================
+  const sendSelectedImages = async () => {
+
+    if (selectedImages.length === 0 || isSending) return;
+
+    setIsSending(true);
+
+    try {
+      const token = await AsyncStorage.getItem("token");
+
+      const formData = new FormData();
+
+      selectedImages.forEach((img, index) => {
+        formData.append("images", {
+          uri: img.uri,
+          name: img.fileName || `chat_${index}.jpg`,
+          type: img.mimeType || "image/jpeg"
+        });
+      });
+
+      formData.append("roomId", roomId);
+      formData.append("messageType", "image");
+
+      console.log("SENDING IMAGES:", selectedImages.length);
+
+      const res = await fetch(
+        `${BASE_URL}/api/chat/message`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          body: formData
+        }
+      );
+
+      const data = await res.json();
+
+      console.log("BACKEND RESPONSE:", data);
+
+      setSelectedImages([]);
+
+    } catch (err) {
+      console.log("SEND IMAGE ERROR:", err);
+
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  useEffect(() => {
+    // console.log(
+    //   "SELECTED IMAGES UPDATED:",
+    //   selectedImages.length
+    // );
+
+    selectedImages.forEach((img, index) => {
+      console.log(`IMAGE ${index}:`, img.uri);
+    });
+
+  }, [selectedImages]);
 
   // ================= START RECORDING =================
   const startRecording = async () => {
@@ -410,8 +504,14 @@ const ChatScreen = ({ route, navigation }) => {
       >
         <View
           style={[
-            styles.bubble,
-            isMe ? styles.myBubble : styles.otherBubble
+            item.messageType === "image"
+              ? {
+                  maxWidth: "85%"
+                }
+              : [
+                  styles.bubble,
+                  isMe ? styles.myBubble : styles.otherBubble
+                ]
           ]}
         >
 
@@ -421,12 +521,31 @@ const ChatScreen = ({ route, navigation }) => {
           )}
 
           {/* IMAGE */}
-          {item.messageType === "image" && item.images?.length > 0 && (
-            <Image
-              source={{ uri: item.images[0] }}
-              style={styles.image}
-            />
-           
+          {item.messageType === "image" &&
+            item.images?.length > 0 && (
+
+            <View style={{ flexDirection: "row" }}>
+              {item.images.map((img, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    setModalImage(img);
+                    setShowImageModal(true);
+                  }}
+                >
+                  <Image
+                    source={{ uri: img }}
+                    style={{
+                      width: 120,
+                      height: 120,
+                      borderRadius: 10,
+                      marginRight: 5
+                    }}
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+
           )}
 
           {/* AUDIO */}
@@ -493,19 +612,37 @@ const ChatScreen = ({ route, navigation }) => {
     >
 
       {/* ================= HEADER ================= */}
-      <View style={styles.header}>
+      <TouchableOpacity style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="chevron-back" size={26} color="#090808" />
         </TouchableOpacity>
 
         <TouchableOpacity
-            style={styles.userHeader}
-            onPress={() =>
-            navigation.navigate("UserProfileView", {
-                userId: user._id,
-                role: user.role
-            })
+          style={styles.userHeader}
+          onPress={() => {
+            // console.log("USER ROLE:", user.role);
+            // console.log("USER:", user);
+            if (user.role === "worker") {
+
+              navigation.navigate(
+                "ViewWorkerProfile",
+                {
+                  workerId: user._id
+                }
+              );
+
+            } else {
+
+              navigation.navigate(
+                "ViewCustomerProfile",
+                {
+                  customerId: user._id
+                }
+              );
+
             }
+
+          }}
         >
             {/* <Image
             source={{
@@ -526,7 +663,7 @@ const ChatScreen = ({ route, navigation }) => {
             {user.name || user.username}
             </Text>
         </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
 
       {/* ================= MESSAGES ================= */}
       <FlatList
@@ -537,6 +674,44 @@ const ChatScreen = ({ route, navigation }) => {
         contentContainerStyle={{ padding: 10 }}
       />
 
+      {selectedImages.length > 0 && (
+        <FlatList
+          horizontal
+          data={selectedImages}
+          keyExtractor={(_, index) => index.toString()}
+          style={{ padding: 10 }}
+          renderItem={({ item, index }) => (
+            <View style={{ marginRight: 10 }}>
+              <Image
+                source={{ uri: item.uri }}
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 10
+                }}
+              />
+
+              <TouchableOpacity
+                onPress={() => removeSelectedImage(index)}
+                style={{
+                  position: "absolute",
+                  top: 2,
+                  right: 2,
+                  backgroundColor: "black",
+                  borderRadius: 10,
+                  padding: 2
+                }}
+              >
+                <Ionicons
+                  name="close"
+                  size={14}
+                  color="#fff"
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      )}
       {/* ================= INPUT ================= */}
       <View style={styles.inputContainer}>
         <TouchableOpacity onPress={pickImage}>
@@ -554,6 +729,16 @@ const ChatScreen = ({ route, navigation }) => {
           style={styles.input}
         />
         {isTyping && <Text style={{ color: "#fff" }}>Typing...</Text>}
+        {isSending && (
+          <Text
+            style={{
+              color: "purple",
+              marginLeft: 10
+            }}
+          >
+            Sending images...
+          </Text>
+        )}
         {isRecording && (
           <Text style={{ color: "purple", marginLeft: 10 }}>
             Recording...
@@ -571,17 +756,44 @@ const ChatScreen = ({ route, navigation }) => {
         </TouchableOpacity> */}
 
         <TouchableOpacity
+          disabled={isSending}
           onPress={() => {
-            if (isRecording) {
-              stopRecording(); // 🔥 auto send voice
+            if (selectedImages.length > 0) {
+              sendSelectedImages();
+            } else if (isRecording) {
+              stopRecording();
             } else {
               sendMessage();
             }
           }}
         >
-          <Ionicons name="send" size={24} color="#666" />
+          <Ionicons name="send" size={24} color={isSending ? "#ccc" : "#666"} />
         </TouchableOpacity>
       </View>
+      <Modal
+        visible={showImageModal}
+        transparent
+        animationType="fade"
+      >
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.9)",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+          onPress={() => setShowImageModal(false)}
+        >
+          <Image
+            source={{ uri: modalImage }}
+            style={{
+              width: "95%",
+              height: "70%",
+              resizeMode: "contain"
+            }}
+          />
+        </TouchableOpacity>
+      </Modal>
 
     </LinearGradient>
   );

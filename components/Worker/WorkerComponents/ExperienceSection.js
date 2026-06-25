@@ -3,7 +3,9 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image
+  Image,
+  Modal,
+  ScrollView
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,6 +17,9 @@ import BASE_URL from "../../../utils/api";
 //   : "https://hand2hand-backend.onrender.com";
 
 const ExperienceSection = ({ images, setImages }) => {
+
+  const [showImageModal, setShowImageModal] = React.useState(false);
+  const [selectedImage, setSelectedImage] = React.useState(null);
 
   const pickImages = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -91,7 +96,7 @@ const ExperienceSection = ({ images, setImages }) => {
     }
   };
 
-  console.log("EXPERIENCE IMAGES:", JSON.stringify(images, null, 2));
+  // console.log("EXPERIENCE IMAGES:", JSON.stringify(images, null, 2));
   return (
     <View style={{ marginTop: 20 }}>
 
@@ -110,42 +115,83 @@ const ExperienceSection = ({ images, setImages }) => {
           Add your experience and works here
         </Text>
       ) : (
-        <View style={{
-          flexDirection: "row",
-          flexWrap: "wrap",
-          marginTop: 10,
-          gap: 10
-        }}>
-          {images.map((img, i) => (
-            <View key={i} style={{ position: "relative" }}>
-              <Image
-                source={{ uri: img.url }}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              marginTop: 10,
+              gap: 10,
+              paddingRight: 10
+            }}
+          >
+            {images.map((img, i) => (
+              <View
+                key={i}
                 style={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: 10
-                }}
-              />
-
-              {/* DELETE */}
-              <TouchableOpacity
-                onPress={() => deleteImage(img.url)}
-                style={{
-                  position: "absolute",
-                  top: 5,
-                  right: 5,
-                  backgroundColor: "black",
-                  borderRadius: 10,
-                  padding: 2
+                  position: "relative"
                 }}
               >
-                <Ionicons name="close" size={14} color="#fff" />
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
-      )}
 
+                {/* OPEN IMAGE */}
+                <TouchableOpacity
+                  onPress={() => {
+                    setSelectedImage(img.url);
+                    setShowImageModal(true);
+                  }}
+                >
+                  <Image
+                    source={{ uri: img.url }}
+                    style={{
+                      width: 120,
+                      height: 120,
+                      borderRadius: 10
+                    }}
+                  />
+                </TouchableOpacity>
+
+                {/* DELETE BUTTON */}
+                <TouchableOpacity
+                  onPress={() => deleteImage(img.url)}
+                  style={{
+                    position: "absolute",
+                    top: 5,
+                    right: 5,
+                    backgroundColor: "black",
+                    borderRadius: 10,
+                    padding: 2
+                  }}
+                >
+                  <Ionicons name="close" size={14} color="#fff" />
+                </TouchableOpacity>
+
+              </View>
+            ))}
+          </ScrollView>
+      )}
+    <Modal
+      visible={showImageModal}
+      transparent
+      animationType="fade"
+    >
+      <TouchableOpacity
+        style={{
+          flex: 1,
+          backgroundColor: "rgba(0,0,0,0.9)",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+        onPress={() => setShowImageModal(false)}
+      >
+        <Image
+          source={{ uri: selectedImage }}
+          style={{
+            width: "95%",
+            height: "70%",
+            resizeMode: "contain"
+          }}
+        />
+      </TouchableOpacity>
+    </Modal>
     </View>
   );
 };

@@ -47,7 +47,7 @@ export default function LoginForm({
       return;
     }
 
-    console.log("API BASE URL:", BASE_URL);
+    // console.log("API BASE URL:", BASE_URL);
 
     setLoading(true);
 
@@ -98,7 +98,7 @@ export default function LoginForm({
       const data = await res.json();
       setLoading(false);
 
-      console.log("LOGIN RESPONSE:", data);
+      // console.log("LOGIN RESPONSE:", data);
 
       if (!res.ok) {
         setMessage(data.message || "Login failed ❌");
@@ -131,7 +131,7 @@ export default function LoginForm({
     //   setMessage("Server error, please try again later.");
     // }
     catch (error) {
-      console.error("LOGIN ERROR:", error); // 👈 ADD THIS
+      console.error("LOGIN ERROR:", error); 
       res.status(500).json({ message: "Server error", error: error.message });
     }
 

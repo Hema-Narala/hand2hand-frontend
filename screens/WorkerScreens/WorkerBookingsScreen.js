@@ -48,9 +48,16 @@ export default function BookingsScreen({ navigation }) {
     }
   };
 
+
   useEffect(() => {
     fetchBookings();
-  }, []);
+
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchBookings();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   // ✅ FILTER
   const filteredBookings = bookings.filter(

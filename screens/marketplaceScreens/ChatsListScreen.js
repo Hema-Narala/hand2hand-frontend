@@ -10,6 +10,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import BASE_URL from "../../utils/api";
+import socket from "../../utils/socket";
 import styles from "../../styles/MarketplaceScreenStyles/ChatsListStyles";
 
 // const BASE_URL = "http://10.0.2.2:5000";
@@ -82,7 +83,7 @@ const ChatsListScreen = ({ navigation }) => {
 
         const data = await res.json();
 
-        console.log("START CHAT RESPONSE:", data); // 🔥 DEBUG
+        // console.log("START CHAT RESPONSE:", data); // 🔥 DEBUG
 
         if (!data.chatRoom) {
         console.log("ChatRoom missing");
@@ -120,6 +121,18 @@ const ChatsListScreen = ({ navigation }) => {
     chat.otherUser?.username?.toLowerCase().includes(search.toLowerCase())
   );
 
+  // ========= whenever any message is sent, chats list refreshes instantly using the below useeffect ==========
+  useEffect(() => {
+
+    socket.on("newMessage", () => {
+      fetchChats();
+    });
+
+    return () => {
+      socket.off("newMessage");
+    };
+
+  }, []);
   return (
     <View style={styles.container}>
 
@@ -203,14 +216,72 @@ const ChatsListScreen = ({ navigation }) => {
                 {item.otherUser?.username}
               </Text>
 
-              <Text style={styles.lastMsg} numberOfLines={1}>
+              {/* <Text style={styles.lastMsg} numberOfLines={1}>
+                {item.lastMessage}
+              </Text> */}
+              <Text
+                style={[
+                  styles.lastMsg,
+                  item.unreadCount > 0 && {
+                    fontWeight: "bold",
+                    color: "#05050593"
+                  }
+                ]}
+                numberOfLines={1}
+              >
                 {item.lastMessage}
               </Text>
             </View>
 
-            <Text style={styles.time}>
+            {/* <Text style={styles.time}>
               {new Date(item.updatedAt).toLocaleTimeString()}
-            </Text>
+            </Text> */}
+
+            <View style={{ alignItems: "center" }}>
+
+              <Text
+                style={[
+                  styles.time,
+                  {
+                    color:
+                      item.unreadCount > 0
+                        ? "#5747d3"   // Green for unread chats
+                        : "#999"      // Normal color
+                  }
+                ]}
+              >
+                {new Date(item.updatedAt).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit"
+                })}
+              </Text>
+
+              {item.unreadCount > 0 && (
+                <View
+                  style={{
+                    backgroundColor: "#6c5ce7",
+                    minWidth: 24,
+                    height: 24,
+                    borderRadius: 12,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 5,
+                    paddingHorizontal: 6
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontWeight: "bold",
+                      fontSize: 12
+                    }}
+                  >
+                    {item.unreadCount}
+                  </Text>
+                </View>
+              )}
+
+            </View>
           </TouchableOpacity>
         )}
       />

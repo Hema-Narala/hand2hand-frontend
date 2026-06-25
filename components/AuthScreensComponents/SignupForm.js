@@ -41,7 +41,7 @@ export default function SignupForm({
   //   ? "http://10.0.2.2:5000"
   //   : "https://hand2hand-backend.onrender.com";
 
-    console.log("API BASE URL:", BASE_URL);
+    // console.log("API BASE URL:", BASE_URL);
 
   // const handleSignup = async () => {
   //   setMessage("");

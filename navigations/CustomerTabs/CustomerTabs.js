@@ -7,12 +7,14 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 // Screens
 // import CustomerDashboardScreen from "../../screens/CustomerScreens/CustomerDashboardScreen";
 import CustomerProfileScreen from "../../screens/CustomerScreens/CustomerProfileScreen";
-import BookingsScreen from "../../screens/CustomerScreens/BookingScreen";
+// import BookingsScreen from "../../screens/CustomerScreens/BookingScreen";
+import BookingStackNavigator from './BookingStackNavigator';
+import ViewWorkerProfileScreen from '../../screens/CustomerScreens/ViewWorkerProfileScreen';
 import ChatStackNavigator from './CustomerChatStackNavigator';
 import EcoStoreScreen from "../../screens/CustomerScreens/EcoStoreSubScreens/EcoStoreScreen";
 import SellScreen from "../../screens/CustomerScreens/SellScreen";
 import HomeStackNavigator from './CustomerHomeStackNavigator';
-import ChatScreen from '../../screens/marketplaceScreens/ChatScreen'
+import ChatScreen from '../../screens/marketplaceScreens/ChatScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -89,8 +91,8 @@ const CustomerTabs = () => {
         // }}
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route) ?? 'CustomerDashboard';
-          const hideOnScreens = ['HiringStack', 'RequestsForMyPost', 'CreateJobPostForm'];
-          console.log("Route Name:", routeName);
+          const hideOnScreens = ['HiringStack', 'RequestsForMyPost', 'CreateJobPostForm','ChatStackNavigator'];
+          // console.log("Route Name:", routeName);
           return {
             tabBarStyle: hideOnScreens.includes(routeName)
               ? { display: 'none' }
@@ -114,7 +116,8 @@ const CustomerTabs = () => {
         component={ChatStackNavigator}
         options={({ route }) => {
           const routeName =
-            getFocusedRouteNameFromRoute(route) ?? "ChatsListScreen";
+            getFocusedRouteNameFromRoute(route) ?? "ChatsList";
+            const hideOnScreens = ['ChatScreen','ViewWorkerProfile','ViewCustomerProfile'];
 
           return {
             tabBarStyle:
@@ -152,11 +155,12 @@ const CustomerTabs = () => {
       <Tab.Screen
         name="Bookings"
         // component={RecycleInfoStackNavigator}
-        component={BookingsScreen}
+        component={BookingStackNavigator}
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route) ?? 'HomeMain';
           // const hideOnScreens = ['LevelStack', 'Tasks', 'Achievements', 'Ranking', 'MoreLevels','WalletStack','History','DiscoveryStack','CampusComplaintsStack'];
           const hideOnScreens = ['ChatScreen'];
+          
 
           return {
             tabBarStyle: hideOnScreens.includes(routeName)

@@ -7,6 +7,7 @@ import {
   Alert,
   TextInput
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -20,6 +21,8 @@ export default function BookingCard({
   userType,
   refreshBookings
 }) {
+
+  const navigation = useNavigation();
 
   // ✅ customer should see worker
 
@@ -204,10 +207,23 @@ export default function BookingCard({
 
     <View style={styles.card}>
 
-      <Image
-        source={{ uri: profileImage }}
-        style={styles.profileImage}
-      />
+      <TouchableOpacity
+        onPress={() => {
+          if (!booking.worker?._id) {
+            console.log("Worker ID missing");
+            return;
+          }
+
+          navigation.navigate("ViewWorkerProfile", {
+            workerId: booking.worker._id
+          });
+        }}
+      >
+        <Image
+          source={{ uri: profileImage }}
+          style={styles.profileImage}
+        />
+      </TouchableOpacity>
 
       <View style={styles.detailsContainer}>
 

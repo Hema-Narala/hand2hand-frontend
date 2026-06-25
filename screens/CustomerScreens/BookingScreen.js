@@ -1,89 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-// import { LinearGradient } from "expo-linear-gradient";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-// import BookingCard from "../../components/Customer/CustomerComponents/BookingCard";
-// import styles from "../../styles/CustomerScreenStyles/BookingsScreenStyles";
-// import { Ionicons } from "@expo/vector-icons";
-
-// const BASE_URL = "http://10.0.2.2:5000";
-
-// export default function BookingsScreen({navigation}) {
-//   const [activeTab, setActiveTab] = useState("Active");
-
-//   const [bookings, setBookings] = useState([]);
-
-//   const fetchBookings = async () => {
-//     try {
-//       const token = await AsyncStorage.getItem("token");
-
-//       const response = await fetch(
-//         `${BASE_URL}/api/bookings/mine`,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${token}`
-//           }
-//         }
-//       );
-
-//       const data = await response.json();
-
-//       setBookings(data.bookings || []);
-
-//     } catch (error) {
-//       console.log("Fetch bookings error:", error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchBookings();
-//   }, []);
-
-//   const filteredBookings = bookings.filter(
-//     (b) =>
-//       (b.status || "").toLowerCase() ===
-//       activeTab.toLowerCase()
-//   );
-
-//   return (
-//     <LinearGradient colors={["#a07be3ff", "#69b7d5ff"]} style={styles.container}>
-//       {/* Back button */}
-//       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-//         <Ionicons name="chevron-back" size={24} color="#fff" />
-//       </TouchableOpacity>
-
-//       <Text style={styles.heading}>My Bookings</Text>
-
-//       {/* Tabs */}
-//       <View style={styles.tabContainer}>
-//         {["Active", "Completed", "Cancelled"].map((tab) => (
-//           <TouchableOpacity
-//             key={tab}
-//             style={[
-//               styles.tabButton,
-//               activeTab === tab && styles.activeTabButton,
-//             ]}
-//             onPress={() => setActiveTab(tab)}
-//           >
-//             <Text style={styles.tabText}>{tab}</Text>
-//           </TouchableOpacity>
-//         ))}
-//       </View>
-
-//       {/* Cards List */}
-//       <ScrollView>
-//         {filteredBookings.map((booking) => (
-//           <BookingCard
-//             key={booking._id}
-//             booking={booking}
-//             type={activeTab}
-//             refreshBookings={fetchBookings}
-//           />
-//         ))}
-//       </ScrollView>
-//     </LinearGradient>
-//   );
-// }
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -136,7 +50,13 @@ export default function BookingsScreen({ navigation }) {
 
   useEffect(() => {
     fetchBookings();
-  }, []);
+
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchBookings();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   // ✅ FILTER
   const filteredBookings = bookings.filter(

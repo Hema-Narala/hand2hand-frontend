@@ -67,7 +67,7 @@ export default function SecurityQuestionsScreen({ route, navigation }) {
         await AsyncStorage.setItem("token", data.token);
         await AsyncStorage.setItem("user", JSON.stringify(data.user));
 
-        console.log("Navigating to:", nextScreen);
+        // console.log("Navigating to:", nextScreen);
 
         navigation.reset({
             index: 0,

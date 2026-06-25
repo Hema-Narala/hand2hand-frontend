@@ -61,7 +61,7 @@ const WorkerProfileScreen = ({navigation}) => {
   );
 
   const [experienceImages, setExperienceImages] = useState([]);
-  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
 
   const servicesList = Object.keys(selectedServices);
 
@@ -98,7 +98,7 @@ const WorkerProfileScreen = ({navigation}) => {
 
       if (res.ok) {
         setIsEditing(false);
-        console.log("Profile saved successfully");
+        // console.log("Profile saved successfully");
       } else {
         console.log("Save failed:", data);
       }
@@ -221,7 +221,6 @@ const WorkerProfileScreen = ({navigation}) => {
 
         if (res.ok && data.profileImage) {
           setProfileImage(data.profileImage);
-          setShowProfileModal(false);
         }
 
       } catch (err) {
@@ -270,20 +269,35 @@ const WorkerProfileScreen = ({navigation}) => {
       <View style={styles.profileCard}>
 
         {/* Profile Image */}
-        <TouchableOpacity onPress={() => setShowProfileModal(true)}>
-          {/* <Image source={{ uri: profileImage }} style={styles.profileImage} /> */}
-          <Image
-            source={
-              profileImage
-                ? { uri: profileImage }
-                : require("../../assets/default-profile.jpg")
-            }
-            style={styles.profileImage}
-          />
-          <View style={styles.cameraIcon}>
-            <Ionicons name="camera" size={16} color="#fff" />
-          </View>
-        </TouchableOpacity>
+        <View>
+
+          {/* Open image in full screen */}
+          <TouchableOpacity
+            onPress={() => setShowImageModal(true)}
+          >
+            <Image
+              source={
+                profileImage
+                  ? { uri: profileImage }
+                  : require("../../assets/default-profile.jpg")
+              }
+              style={styles.profileImage}
+            />
+          </TouchableOpacity>
+
+          {/* Camera icon -> change image */}
+          <TouchableOpacity
+            style={styles.cameraIcon}
+            onPress={pickProfileImage}
+          >
+            <Ionicons
+              name="camera"
+              size={16}
+              color="#fff"
+            />
+          </TouchableOpacity>
+
+        </View>
 
         {!isEditing ? (
           <>
@@ -539,31 +553,33 @@ const WorkerProfileScreen = ({navigation}) => {
 
 
       {/* 🔹 PROFILE IMAGE MODAL */}
-      <Modal visible={showProfileModal} transparent>
-      {/* <Modal transparent={true} visible={true}> */}
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
-            <Image source={{ uri: profileImage }} style={styles.modalImage} />
-
-            <TouchableOpacity style={styles.modalBtn} onPress={pickProfileImage}>
-              <Text>Change Photo</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.modalBtn, styles.deleteBtn]}
-              onPress={() => {
-                setProfileImage(null);
-                setShowProfileModal(false);
-              }}
-            >
-              <Text style={{ color: "#fff" }}>Remove Photo</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => setShowProfileModal(false)}>
-              <Text style={{ marginTop: 10 }}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+      <Modal
+        visible={showImageModal}
+        transparent
+        animationType="fade"
+      >
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.9)",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+          onPress={() => setShowImageModal(false)}
+        >
+          <Image
+            source={
+              profileImage
+                ? { uri: profileImage }
+                : require("../../assets/default-profile.jpg")
+            }
+            style={{
+              width: "95%",
+              height: "70%",
+              resizeMode: "contain"
+            }}
+          />
+        </TouchableOpacity>
       </Modal>
 
     </ScrollView>

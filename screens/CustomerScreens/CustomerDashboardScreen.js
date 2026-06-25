@@ -80,7 +80,7 @@ export default function CustomerDashboardScreen({navigation,route }) {
 
           if (res.ok) {
             setProfile(data);
-            console.log("Customer Profile:", data);
+            // console.log("Customer Profile:", data);
           } else {
             console.log("❌ Error fetching user:", data.message);
           }

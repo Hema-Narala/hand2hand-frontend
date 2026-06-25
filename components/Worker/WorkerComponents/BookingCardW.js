@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -19,6 +20,7 @@ export default function BookingCardW({
   refreshBookings
 }) {
 
+  const navigation = useNavigation();
   // worker should see customer
 
   const user = booking.customer;
@@ -78,10 +80,26 @@ export default function BookingCardW({
 
     <View style={styles.card}>
 
-      <Image
-        source={{ uri: profileImage }}
-        style={styles.profileImage}
-      />
+      <TouchableOpacity
+        onPress={() => {
+          if (!booking.customer?._id) {
+            console.log("Customer ID missing");
+            return;
+          }
+
+          navigation.navigate(
+            "ViewCustomerProfile",
+            {
+              customerId: booking.customer._id
+            }
+          );
+        }}
+      >
+        <Image
+          source={{ uri: profileImage }}
+          style={styles.profileImage}
+        />
+      </TouchableOpacity>
 
       <View style={styles.detailsContainer}>
 

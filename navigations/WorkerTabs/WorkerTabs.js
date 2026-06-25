@@ -91,9 +91,9 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 import WorkerDashboardScreen from "../../screens/WorkerScreens/WorkerDashboardScreen";
 import WorkerProfileScreen from "../../screens/WorkerScreens/WorkerProfileScreen";
-import BookingsScreen from "../../screens/WorkerScreens/WorkerBookingsScreen";
 import WorkerHomeStackNavigator from "./WorkerHomeStackNavigator";
 import ChatStackNavigator from "./WorkerChatStackNavigator";
+import BookingStackNavigator from './BookingStackNavigatorW';
 
 const Tab = createBottomTabNavigator();
 
@@ -127,8 +127,8 @@ const WorkerTabs = () => {
         // }}
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route) ?? 'WorkerDashboardScreen';
-          const hideOnScreens = ['SearchWork', 'RequestsForMyPost', 'CreateJobPostForm','ChatScreen'];
-          console.log("Route Name:", routeName);
+          const hideOnScreens = ['SearchWork', 'RequestsForMyPost', 'CreateJobPostForm','ChatScreen','ViewCustomerProfile','ViewWorkerProfile'];
+          // console.log("Route Name:", routeName);
           return {
             tabBarStyle: hideOnScreens.includes(routeName)
               ? { display: 'none' }
@@ -152,8 +152,8 @@ const WorkerTabs = () => {
         name="Chat"
         component={ChatStackNavigator}
         options={({ route }) => {
-          const routeName =
-            getFocusedRouteNameFromRoute(route) ?? "ChatsListScreen";
+          const routeName = getFocusedRouteNameFromRoute(route) ?? "ChatsList";
+          const hideOnScreens = ['ChatScreen','ViewWorkerProfile','ViewCustomerProfile'];
 
           return {
             tabBarStyle:
@@ -192,11 +192,11 @@ const WorkerTabs = () => {
       <Tab.Screen
         name="Bookings"
         // component={RecycleInfoStackNavigator}
-        component={BookingsScreen}
+        component={BookingStackNavigator}
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route) ?? 'HomeMain';
           // const hideOnScreens = ['LevelStack', 'Tasks', 'Achievements', 'Ranking', 'MoreLevels','WalletStack','History','DiscoveryStack','CampusComplaintsStack'];
-          const hideOnScreens = [];
+          const hideOnScreens = ['ChatScreen','ViewWorkerProfile','ViewCustomerProfile'];
 
           return {
             tabBarStyle: hideOnScreens.includes(routeName)

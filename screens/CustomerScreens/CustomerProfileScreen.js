@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  FlatList
+  FlatList,
+  Modal
 } from "react-native";
 import { Ionicons, Feather, FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,7 +22,7 @@ import BASE_URL from "../../utils/api";
 //     ? "http://10.0.2.2:5000"
 //     : "https://hand2hand-backend.onrender.com";
     
- console.log("API BASE URL:", BASE_URL);
+//  console.log("API BASE URL:", BASE_URL);
 
 const STORAGE_KEY = "SAVED_WORKERS";
 
@@ -31,6 +32,8 @@ const CustomerProfileScreen = ({navigation}) => {
 
   const [savedWorkers, setSavedWorkers] = useState([]);
   const [showAddressFields, setShowAddressFields] = useState(false);
+
+  const [showImageModal, setShowImageModal] = useState(false);
 
   const [profileImage, setProfileImage] = useState(
     "https://cdn-icons-png.flaticon.com/512/149/149071.png"
@@ -293,17 +296,35 @@ const handleSaveProfile = async () => {
 
       {/* Profile Card */}
       <View style={styles.profileCard}>
-        <TouchableOpacity onPress={pickImage}>
-          <Image
-            source={
-              profileImage && typeof profileImage === "string"
-                ? { uri: profileImage }
-                : require("../../assets/default-profile.jpg")
-            }
-            style={styles.profileImage}
-          />
-          <Ionicons name="camera" size={18} style={styles.cameraIcon} />
-        </TouchableOpacity>
+        <View>
+
+          {/* Open image */}
+          <TouchableOpacity
+            onPress={() => setShowImageModal(true)}
+          >
+            <Image
+              source={
+                profileImage && typeof profileImage === "string"
+                  ? { uri: profileImage }
+                  : require("../../assets/default-profile.jpg")
+              }
+              style={styles.profileImage}
+            />
+          </TouchableOpacity>
+
+          {/* Change image */}
+          <TouchableOpacity
+            onPress={pickImage}
+            style={styles.cameraIcon}
+          >
+            <Ionicons
+              name="camera"
+              size={18}
+              color="#fff"
+            />
+          </TouchableOpacity>
+
+        </View>
 
         {!isEditing ? (
           <>
@@ -425,7 +446,34 @@ const handleSaveProfile = async () => {
           ))}
         </View>
       )}
-
+      <Modal
+        visible={showImageModal}
+        transparent
+        animationType="fade"
+      >
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.9)",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+          onPress={() => setShowImageModal(false)}
+        >
+          <Image
+            source={
+              profileImage && typeof profileImage === "string"
+                ? { uri: profileImage }
+                : require("../../assets/default-profile.jpg")
+            }
+            style={{
+              width: "95%",
+              height: "70%",
+              resizeMode: "contain"
+            }}
+          />
+        </TouchableOpacity>
+      </Modal>
       {/* Wallet */}
       {/* {!isEditing && (
         <View style={styles.walletCard}>

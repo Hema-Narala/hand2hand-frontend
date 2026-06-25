@@ -123,22 +123,33 @@ const JobOfferCard = ({ offer, refreshRequests }) => {
     <>
       {/* CARD */}
       <View style={styles.card}>
-        <View>
-          <Image
-            
-            source={
-              offer?.profileImage 
-                ? { uri: offer?.profileImage }
-                : require("../../../assets/default-profile.jpg")
-            }
-            style={styles.customerImg}
-          />
-          <Text style={styles.nameService}>
-            <Text style={{ fontWeight: "bold" }}>
-              {offer.customerName}
-            </Text>{" "}
-          </Text>
-        </View>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(
+              "ViewCustomerProfile",
+              {
+                customerId: offer.customer._id
+              }
+            )
+          }
+        >
+          <View>
+            <Image
+              source={
+                offer?.profileImage
+                  ? { uri: offer?.profileImage }
+                  : require("../../../assets/default-profile.jpg")
+              }
+              style={styles.customerImg}
+            />
+
+            <Text style={styles.nameService}>
+              <Text style={{ fontWeight: "bold" }}>
+                {offer.customerName}
+              </Text>
+            </Text>
+          </View>
+        </TouchableOpacity>
 
 
         <View style={styles.details}>

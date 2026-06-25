@@ -21,7 +21,7 @@ import JobOfferCard from "../../components/Worker/WorkerComponents/JobOfferCard"
 import styles from "../../styles/WorkerScreenStyles/SearchCustomerStyles";
 
 // const BASE_URL = "http://10.0.2.2:5000"; 
-console.log("STYLES:", styles);
+
 const services = [
   { name: "All Jobs", icon: require("../../assets/workers.png") },
   { name: "Plumber", icon: require("../../assets/plumber.png") },

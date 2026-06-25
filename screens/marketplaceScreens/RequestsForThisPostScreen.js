@@ -40,7 +40,7 @@ const RequestsForThisPostScreen = ({ navigation, route }) => {
 
       const data = await response.json();
 
-      console.log("REQUEST RESPONSE:", data);
+      // console.log("REQUEST RESPONSE:", data);
       setRequests(data.requests || []);
 
     } catch (error) {

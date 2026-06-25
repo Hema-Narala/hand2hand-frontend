@@ -6,6 +6,7 @@ import RequestsForMyPostScreen from '../../screens/marketplaceScreens/RequestsFo
 import CreateJobPostForm from '../../components/Customer/CustomerComponents/CreateJobPostForm';
 import CustomerChatStackNavigator from './CustomerChatStackNavigator';
 import ChatScreen from '../../screens/marketplaceScreens/ChatScreen';
+import ViewWorkerProfileScreen from '../../screens/CustomerScreens/ViewWorkerProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ const HiringStackNavigator = () => {
       <Stack.Screen name="RequestsForMyPost" component={RequestsForMyPostScreen} />
       <Stack.Screen name="CreateJobPostForm" component={CreateJobPostForm} />
       <Stack.Screen name="ChatStack" component={CustomerChatStackNavigator} />
+      <Stack.Screen name="ViewWorkerProfile" component={ViewWorkerProfileScreen} />
       {/* <Stack.Screen name="ChatScreen" component={ChatScreen} /> */}
     </Stack.Navigator>
   );

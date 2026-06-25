@@ -126,7 +126,17 @@ const JobPostCard = ({ post, refreshPosts }) => {
 
       {/* LEFT PROFILE */}
 
-      <View style={{ alignItems: "center", marginRight: 12 }}>
+      <TouchableOpacity 
+        style={{ alignItems: "center", marginRight: 12 }}
+        onPress={() =>
+          navigation.navigate(
+            "ViewWorkerProfile",
+            {
+              workerId: post.worker._id
+            }
+          )
+        }
+      >
 
         <Image
           source={{
@@ -144,7 +154,7 @@ const JobPostCard = ({ post, refreshPosts }) => {
           {post.worker?.username}
         </Text>
 
-      </View>
+      </TouchableOpacity>
 
 
       {/* RIGHT CONTENT */}
